@@ -1,226 +1,86 @@
-**ReplyMind – Hệ thống hỗ trợ phản hồi khách hàng cho thương hiệu D2C (Direct-to-Consumer)** 
-
-**Định hướng sản phẩm Web-first và thuộc nhóm AI & Automation**
-
-### **1\. Mục tiêu sản phẩm (Product Objectives)**
-
-Quản lý và phản hồi tin nhắn khách hàng   
-Giảm thời gian xử lý các câu hỏi lặp lại.   
-Đảm bảo phản hồi phù hợp với phong cách thương hiệu.   
-Phát hiện các tin nhắn tiêu cực hoặc cần ưu tiên.   
-AI phân tích → **AI đề xuất phản hồi** → Nhân viên kiểm duyệt/chỉnh sửa → Gửi khách hàng 
-
-### **2\. Đối tượng người dùng (Target Users)**
-
-Nhân viên trực tiếp phản hồi khách hàng.   
-	Nhận gợi ý phản hồi từ AI.  
-Chỉnh sửa và gửi phản hồi.  
-Người quản lý đội ngũ CSKH.   
-	Theo dõi các hội thoại.  
-Phát hiện vấn đề phổ biến.  
-Theo dõi hiệu quả phản hồi.  
-Quản lý knowledge base.  
-Người quản trị thương hiệu.   
-	Quản lý tài khoản và nhân viên.  
-Cấu hình thông tin thương hiệu.  
-Thiết lập phong cách phản hồi.  
-Theo dõi báo cáo tổng quan.
+# 3.2 Product Requirement Document (PRD) – ReplyMind
 
-### **3\. Phạm vi sản phẩm (Product Scope)**
+**Hệ thống hỗ trợ phản hồi khách hàng cho thương hiệu D2C (Direct-to-Consumer)**  
+*Định hướng sản phẩm Web-first và thuộc nhóm AI & Automation*
 
-Trong phạm vi MVP (Minimum Viable Product )
+---
 
-1. Quản lý hội thoại khách hàng.  
-2. Phân tích intent của tin nhắn.  
-3. Phân tích sentiment.  
-4. Đánh giá mức độ ưu tiên.  
-5. Knowledge Base cho thương hiệu.  
-6. AI đề xuất phản hồi.  
-7. Nhân viên chỉnh sửa và gửi phản hồi.  
-8. Dashboard thống kê cơ bản.
+### 3.2.1 Mục tiêu sản phẩm (Product Objectives)
 
-## Ngoài phạm vi MVP
+* **Tối ưu thời gian xử lý:** Giảm 60-80% thời gian phản hồi các câu hỏi lặp lại cho đội ngũ CSKH D2C.
+* **Đảm bảo chất lượng & Bản sắc thương hiệu:** AI tự động đề xuất câu phản hồi chính xác chính sách và chuẩn phong cách (Brand Tone) của thương hiệu.
+* **Phát hiện ưu tiên:** Tự động phát hiện các tin nhắn tiêu cực, khẩn cấp hoặc khiếu nại để ưu tiên xử lý sớm nhất.
+* **Cơ chế AI Co-pilot (Human-in-the-Loop):** `AI phân tích tin nhắn` $\rightarrow$ `AI đề xuất phản hồi` $\rightarrow$ `Nhân viên kiểm duyệt/chỉnh sửa` $\rightarrow$ `Gửi khách hàng`.
 
-* Tự động trả lời hoàn toàn không cần nhân viên.  
-* Tích hợp nhiều nền tảng mạng xã hội.  
-* CRM hoàn chỉnh (**Customer Relationship Management** )  
-* Phân tích dữ liệu nâng cao.  
-* Hệ thống học lại AI từ phản hồi của người dùng.
+---
 
-### **4\. Tính năng chi tiết (Feature Requirements)**
+### 3.2.2 Đối tượng người dùng (Target Users)
 
-## **F01. Quản lý hội thoại**
+1. **Nhân viên phản hồi (Agent):** Xem danh sách hội thoại, nhận gợi ý từ AI, chỉnh sửa và gửi phản hồi cho khách hàng chỉ với 1 click.
+2. **Người quản lý CSKH (Manager):** Theo dõi các hội thoại, quản lý Knowledge Base, kiểm tra các vấn đề phổ biến và đánh giá hiệu quả làm việc.
+3. **Người quản trị thương hiệu (Admin):** Cấu hình thông tin thương hiệu, thiết lập phong cách văn phong (Brand Tone), quản lý tài khoản nhân viên và theo dõi báo cáo tổng quan.
 
-### *Mục đích:* Giúp nhân viên theo dõi và xử lý tin nhắn khách hàng.
+---
 
-### Người dùng có thể
+### 3.2.3 Phạm vi sản phẩm (Product Scope)
 
-* Xem danh sách hội thoại.  
-* Xem nội dung tin nhắn.  
-* Xem trạng thái hội thoại.  
-* Tìm kiếm hội thoại.  
-* Đánh dấu hội thoại đã xử lý.
+#### A. Trong phạm vi MVP (Minimum Viable Product)
+1. **Quản lý hội thoại:** Danh sách hội thoại, nội dung tin nhắn, trạng thái xử lý và tìm kiếm.
+2. **Phân tích AI:** Tự động phân tích Intent, Sentiment và Priority của tin nhắn.
+3. **Knowledge Base:** Kho lưu trữ bài viết chính sách vận chuyển, đổi trả, hoàn tiền và FAQ thương hiệu.
+4. **AI Reply Suggestion:** AI tạo câu trả lời gợi ý theo đúng tin nhắn, Knowledge Base và Brand Tone.
+5. **Brand Tone Engine:** Cấu hình tone mặc định (Friendly, Professional, Casual, Formal).
+6. **AI Feedback:** Thu thập đánh giá 👍 Helpful / 👎 Not Helpful kèm lý do từ nhân viên.
+7. **Dashboard thống kê:** Báo cáo tổng số hội thoại, tỷ lệ xử lý, phân bổ Intent/Sentiment và chỉ số dùng AI.
 
-## **F02. Phân tích tin nhắn bằng AI**
+#### B. Ngoài phạm vi MVP
+* Tự động trả lời 100% không cần nhân viên kiểm duyệt (Auto-pilot).
+* Tích hợp đa kênh mạng xã hội trực tiếp (Omnichannel APIs).
+* Hệ thống CRM hoàn chỉnh và phân tích dữ liệu chuyên sâu.
 
-### *Mục đích:* Giúp nhân viên nhanh chóng hiểu nội dung và mức độ quan trọng của tin nhắn.
+---
 
-AI thực hiện:
+### 3.2.4 Tính năng chi tiết (Detailed Feature Requirements)
 
-* **Intent Classification. \- Xác định khách hàng muốn gì**   
-  Ví dụ khách hàng gửi: "Where is my order?"  
-  AI phân tích: “Intent: Order Status”  
-  Một số Intent trong ReplyMind là:  
-* Order Status – Hỏi tình trạng đơn hàng.  
-* Shipping – Hỏi về vận chuyển.  
-* Delivery Issue – Vấn đề giao hàng.  
-* Return – Yêu cầu đổi/trả hàng.  
-* Refund – Yêu cầu hoàn tiền.  
-* Product Question – Hỏi về sản phẩm.  
-* Complaint – Khiếu nại.
+* **F01. Quản lý hội thoại (Conversation Management):**
+  * Xem danh sách hội thoại, xem chi tiết tin nhắn, lọc theo trạng thái (`UNHANDLED`, `RESOLVED`), tìm kiếm và đánh dấu đã xử lý.
 
-* **Sentiment Analysis – Phân tích cảm xúc**   
-  Ví dụ: "Thank you\! I really love this product."  
-  AI phân tích: Sentiment: Positive  
-  Các mức cơ bản: Positive – Tích cực; Neutral – Trung lập; Negative – Tiêu cực.  
-* **Priority Detection – Xác định mức độ ưu tiên**   
-  Ví dụ: "My order hasn't arrived yet."  
-  Có thể: “Priority: Medium”  
-  Nhưng: "I was charged twice and need this fixed immediately\!"  
-  Có thể: “Priority: High”  
-  Các mức:  
-* Low – Thấp.  
-* Medium – Trung bình.  
-* High – Cao.  
-* Urgent – Khẩn cấp
+* **F02. Phân tích tin nhắn bằng AI (Message AI Analysis):**
+  * **Intent Classification (7 loại):** `ORDER_STATUS`, `SHIPPING`, `DELIVERY_ISSUE`, `RETURN`, `REFUND`, `PRODUCT_QUESTION`, `COMPLAINT`.
+  * **Sentiment Analysis (3 mức):** `POSITIVE` (Tích cực), `NEUTRAL` (Trung lập), `NEGATIVE` (Tiêu cực).
+  * **Priority Detection (4 mức):** `LOW`, `MEDIUM`, `HIGH`, `URGENT` (Khẩn cấp).
 
-## **F03. Knowledge Base**
+* **F03. Knowledge Base thương hiệu (Knowledge Base Management):**
+  * Lưu trữ và quản lý bài viết chính sách (Vận chuyển, Đổi trả, Hoàn tiền, Thông số SP, FAQ). Quản trị viên có quyền Thêm, Sửa, Xóa thông tin.
 
-### *Mục đích:* Cung cấp nguồn thông tin chính xác cho AI khi tạo phản hồi.
+* **F04. AI Reply Suggestion (Gợi ý phản hồi từ AI):**
+  * AI sử dụng nội dung tin nhắn + Lịch sử hội thoại + Bài viết KB phù hợp + Brand Tone để tạo câu trả lời gợi ý. Hỗ trợ 1-Click Send và chỉnh sửa nhanh.
 
-Knowledge Base có thể bao gồm:
+* **F05. Brand Tone (Cấu hình phong cách thương hiệu):**
+  * Hỗ trợ 4 phong cách giọng văn: `Friendly` (Thân thiện), `Professional` (Chuyên nghiệp), `Casual` (Gần gũi, tự nhiên), `Formal` (Trang trọng).
 
-* Thông tin sản phẩm.  
-* Chính sách vận chuyển.  
-* Chính sách đổi trả.  
-* Chính sách hoàn tiền.  
-* FAQ.
+* **F06. AI Feedback (Đánh giá chất lượng AI):**
+  * Nhân viên đánh giá 👍 `Helpful` hoặc 👎 `Not Helpful` (kèm chọn lý do: *Incorrect information*, *Wrong tone*, *Not relevant*) để huấn luyện nâng cao chất lượng AI.
 
-### **Người quản trị có thể**
+* **F07. Dashboard (Báo cáo thống kê):**
+  * Hiển thị tổng số hội thoại, hội thoại chưa xử lý/đã xử lý, phân bổ Intent/Sentiment, tỷ lệ sử dụng AI (% Adoption Rate) và điểm chất lượng AI Helpful Score.
 
-* Thêm thông tin.  
-* Chỉnh sửa thông tin.  
-* Xóa thông tin.
+---
 
-## **F04. AI Reply Suggestion \_ kho kiến thức của thương hiệu**
+### 3.2.5 Yêu cầu phi chức năng (Non-Functional Requirements)
 
-### *Mục đích:* AI đề xuất phản hồi phù hợp với khách hàng và thương hiệu.
+* **Hiệu suất (Performance):** Thao tác giao diện phản hồi nhanh (< 200ms); AI Suggestion được tạo trong thời gian hợp lý (< 2 giây).
+* **Bảo mật (Security):** Bắt buộc đăng nhập hệ thống, mã hóa mật khẩu, phân quyền chặt chẽ (RBAC) và cách ly tuyệt đối dữ liệu giữa các thương hiệu D2C (Multi-tenant data isolation).
+* **Khả năng mở rộng (Scalability):** Thiết kế sẵn sàng mở rộng thêm thương hiệu, thêm nhân viên và kết nối các kênh nhắn tin D2C.
+* **Trải nghiệm người dùng (UX/UI):** Giao diện Web-first hiện đại, hiển thị nổi bật các tin nhắn ưu tiên cao (`URGENT`), thao tác 1-click đơn giản.
 
-Giúp AI trả lời **đúng thông tin của từng thương hiệu** 
+---
 
-AI sử dụng:
+### 3.2.6 Tiêu chí hoàn thành (Acceptance Criteria)
 
-* Nội dung tin nhắn.  
-* Lịch sử hội thoại.  
-* Brand tone (Friendly – Thân thiện, Professional – Chuyên nghiệp, Casual – Gần gũi, tự nhiên, Formal – Trang trọng)  
-* Knowledge Base.
-
-## **F05. Brand Tone**
-
-### *Mục đích:* Đảm bảo AI phản hồi phù hợp với phong cách thương hiệu.
-
-Các lựa chọn ví dụ:
-
-* Friendly.  
-* Professional.  
-* Casual.  
-* Formal.
-
-Agent hoặc Admin có thể thiết lập tone mặc định cho thương hiệu.
-
-## **F06. AI Feedback**
-
-### *Mục đích:* Thu thập đánh giá về chất lượng phản hồi của AI.
-
-Nhân viên có thể đánh giá:
-
-* 👍 Helpful.  
-* 👎 Not Helpful.
-
-Nếu phản hồi không phù hợp, có thể chọn:
-
-* Incorrect information.  
-* Wrong tone.  
-* Not relevant.
-
-## **F07. Dashboard**
-
-### *Mục đích:* Giúp quản lý theo dõi hoạt động chăm sóc khách hàng.
-
-Dashboard hiển thị:
-
-* Tổng số hội thoại.  
-* Hội thoại chưa xử lý.  
-* Hội thoại đã xử lý.  
-* Intent phổ biến.  
-* Sentiment của khách hàng.  
-* Số lần sử dụng AI.  
-* Tỷ lệ chấp nhận AI suggestion.
-
-### **5\. Yêu cầu phi chức năng (Non-functional Requirements)**
-
-**Hiệu suất**
-
-* Hệ thống phản hồi các thao tác cơ bản nhanh.  
-* AI suggestion được tạo trong thời gian hợp lý.  
-* Inbox có thể xử lý nhiều hội thoại.
-
-**Bảo mật**
-
-* Người dùng phải đăng nhập để sử dụng hệ thống.  
-* Password được mã hóa.  
-* Phân quyền giữa Admin, Manager và Agent.  
-* Dữ liệu giữa các thương hiệu được tách biệt.
-
-**Khả năng mở rộng**
-
-Hệ thống có thể mở rộng để:
-
-* Thêm nhiều thương hiệu.  
-* Thêm nhiều nhân viên.  
-* Thêm các kênh nhắn tin.  
-* Tăng số lượng hội thoại.
-
-**Trải nghiệm người dùng**
-
-* Giao diện đơn giản.  
-* AI suggestion dễ nhận biết.  
-* Hội thoại ưu tiên cao được hiển thị rõ ràng.  
-* Giảm số thao tác cần thiết khi phản hồi khách hàng.
-
-### **6\. Tiêu chí hoàn thành (Acceptance Criteria)**
-
-### **Conversation**
-
-* Người dùng có thể xem và quản lý hội thoại.
-
-### **AI Analysis**
-
-* Hệ thống phân tích được intent và sentiment của tin nhắn.
-
-### **Knowledge Base**
-
-* Admin có thể thêm, sửa và xóa dữ liệu.
-
-### **AI Reply**
-
-* AI có thể tạo phản hồi dựa trên tin nhắn và Knowledge Base.
-
-### **Human Review**
-
-* Agent có thể chỉnh sửa phản hồi trước khi gửi.
-
-### **Dashboard**
-
-* Manager có thể xem các thống kê cơ bản.
-
+* **Conversation:** Người dùng có thể xem, tìm kiếm và quản lý trạng thái hội thoại.
+* **AI Analysis:** Phân tích chính xác Intent, Sentiment và Priority của tin nhắn đầu vào.
+* **Knowledge Base:** Thêm, sửa, xóa thành công các bài viết chính sách thương hiệu.
+* **AI Reply Suggestion:** AI tạo được gợi ý câu trả lời khớp nội dung KB và đúng Brand Tone đã cấu hình.
+* **Human Review & Feedback:** Nhân viên chỉnh sửa được câu trả lời trước khi gửi và thực hiện đánh giá 👍 / 👎 cho AI.
+* **Dashboard:** Quản lý xem được đầy đủ các chỉ số thống kê hoạt động CSKH và chất lượng AI.
