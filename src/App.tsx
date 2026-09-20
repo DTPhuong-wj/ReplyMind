@@ -130,7 +130,7 @@ export const App: React.FC = () => {
   const stats = calculateDashboardStats();
 
   return (
-    <div className="flex flex-col h-screen w-screen bg-slate-950 text-slate-100 overflow-hidden font-sans">
+    <div className="replymind-shell flex flex-col h-screen w-screen bg-slate-950 text-slate-100 overflow-hidden font-sans">
       {/* Header Navbar */}
       <Navbar
         currentBrand={brandConfig}
@@ -153,7 +153,7 @@ export const App: React.FC = () => {
         />
 
         {/* Dynamic Tab Views */}
-        <main className="flex-1 flex overflow-hidden">
+        <main className="replymind-main flex-1 flex overflow-hidden">
           {activeTab === 'INBOX' && (
             <>
               <ConversationList
