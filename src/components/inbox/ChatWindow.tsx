@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Send, Sparkles, ThumbsDown, RefreshCw, CheckCircle, Bot, AlertCircle } from 'lucide-react';
 import { Conversation, BrandToneType, KnowledgeItem, AIFeedbackReason } from '../../types';
-import { generateReplySuggestion } from '../../services/aiEngine';
+import { analyzeCustomerMessage, generateReplySuggestion } from '../../services/aiEngine';
 
 interface ChatWindowProps {
   conversation: Conversation | null;
@@ -30,6 +30,9 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
   const [editableSuggestion, setEditableSuggestion] = useState<string>('');
   const [customInput, setCustomInput] = useState<string>('');
   const [matchedKbTitle, setMatchedKbTitle] = useState<string | undefined>('');
+  const [suggestionConfidence, setSuggestionConfidence] = useState<number>(0);
+  const [hasMatchedKb, setHasMatchedKb] = useState<boolean>(false);
+  const [showRecoveryPanel, setShowRecoveryPanel] = useState<boolean>(false);
   const [showFeedbackModal, setShowFeedbackModal] = useState<boolean>(false);
   const [selectedReason, setSelectedReason] = useState<string>('INCORRECT_INFO');
   const [feedbackComment, setFeedbackComment] = useState<string>('');
@@ -50,6 +53,9 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
         );
         setEditableSuggestion(suggestion.text);
         setMatchedKbTitle(suggestion.matchedKbTitle);
+        setSuggestionConfidence(suggestion.confidence);
+        setHasMatchedKb(analyzeCustomerMessage(lastCustMsg.text, kbList).matchedKbIds.length > 0);
+        setShowRecoveryPanel(false);
       }
     }
   }, [conversation?.id, brandTone, kbList]);
@@ -76,14 +82,16 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
       );
       setEditableSuggestion(res.text);
       setMatchedKbTitle(res.matchedKbTitle);
+      setSuggestionConfidence(res.confidence);
+      setHasMatchedKb(analyzeCustomerMessage(lastCustMsg.text, kbList).matchedKbIds.length > 0);
+      setShowRecoveryPanel(false);
     }
   };
 
   const handleSendSuggestion = () => {
     if (!editableSuggestion.trim()) return;
     onSendMessage(conversation.id, editableSuggestion, true);
-    onSendAiFeedback(conversation.id, 'HELPFUL');
-    setFeedbackSuccess('Đã gửi phản hồi & ghi nhận đánh giá 👍 Helpful cho AI!');
+    setFeedbackSuccess('Đã gửi phản hồi. Hãy đánh giá gợi ý AI để cải thiện chất lượng.');
     setTimeout(() => setFeedbackSuccess(null), 3000);
   };
 
@@ -178,8 +186,21 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
         })}
       </div>
 
-      {/* AI Co-Pilot Suggestion Box (F04 & F06) */}
-      <div className="p-4 bg-slate-900/90 border-t border-slate-800 space-y-3">
+      {/* AI Co-Pilot Suggestion Box (F04 & F05) */}
+      <div className="replymind-review-surface p-4 bg-slate-900/90 border-t border-slate-800 space-y-3">
+        <div className="replymind-warning flex items-center gap-2 rounded-lg border border-amber-500/30 bg-amber-950/20 px-3 py-2 text-[11px] text-amber-200">
+          <AlertCircle className="w-3.5 h-3.5 shrink-0 text-amber-400" />
+          <span>
+            {conversation.priority === 'URGENT' || conversation.priority === 'HIGH'
+              ? 'Priority cao: kiểm tra key facts và chính sách trước khi gửi.'
+              : !hasMatchedKb
+              ? 'Không tìm thấy KB match rõ ràng: không gửi nếu chưa xác minh thông tin.'
+              : suggestionConfidence < 0.8
+              ? 'Confidence thấp: cần Human Review kỹ hơn trước khi gửi.'
+              : 'AI draft đã sẵn sàng để Agent kiểm tra.'}
+          </span>
+        </div>
+
         <div className="bg-slate-950 p-3.5 rounded-xl border border-indigo-500/30 space-y-2.5">
           <div className="flex items-center justify-between text-xs">
             <div className="flex items-center gap-2">
@@ -197,22 +218,28 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
               )}
             </div>
 
-            <button
-              onClick={handleRegenerate}
-              className="text-slate-400 hover:text-indigo-300 text-[11px] flex items-center gap-1 transition-colors"
-              title="Tạo lại gợi ý từ AI"
-            >
-              <RefreshCw className="w-3 h-3" /> Tạo lại
-            </button>
+            <div className="flex items-center gap-2 text-[10px] text-slate-400">
+              <span className="rounded-full bg-slate-800 px-2 py-1">
+                Confidence: <strong className={suggestionConfidence >= 0.8 ? 'text-emerald-300' : 'text-amber-300'}>{Math.round(suggestionConfidence * 100)}%</strong>
+              </span>
+              <button
+                onClick={handleRegenerate}
+                className="text-slate-400 hover:text-indigo-300 flex items-center gap-1 transition-colors"
+                title="Tạo lại gợi ý từ AI"
+              >
+                <RefreshCw className="w-3 h-3" /> Tạo lại
+              </button>
+            </div>
           </div>
 
           {/* Editable AI Suggestion Box */}
           <textarea
             value={editableSuggestion}
             onChange={(e) => setEditableSuggestion(e.target.value)}
+            aria-label="AI reply draft"
             rows={3}
             placeholder="AI suggestion loading..."
-            className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 transition-all resize-none leading-relaxed"
+            className="replymind-draft w-full bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 transition-all resize-none leading-relaxed"
           />
 
           {/* AI Suggestion Actions */}
@@ -220,14 +247,24 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
             <div className="flex items-center gap-2">
               <button
                 onClick={handleSendSuggestion}
-                className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 shadow-md shadow-indigo-600/30 transition-all"
+                className="replymind-send-button bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 shadow-md shadow-indigo-600/30 transition-all"
               >
                 <Send className="w-3.5 h-3.5" />
                 Chấp nhận & Gửi (1-Click)
               </button>
 
               <button
-                onClick={() => setShowFeedbackModal(true)}
+                onClick={() => document.querySelector<HTMLTextAreaElement>('textarea[aria-label="AI reply draft"]')?.focus()}
+                className="bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1.5 rounded-lg text-xs flex items-center gap-1 border border-slate-700 transition-colors"
+              >
+                Sửa
+              </button>
+
+              <button
+                onClick={() => {
+                  setShowFeedbackModal(true);
+                  setShowRecoveryPanel(true);
+                }}
                 className="bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-rose-300 px-2.5 py-1.5 rounded-lg text-xs flex items-center gap-1 border border-slate-700 transition-colors"
                 title="Báo phản hồi không hợp lý (Not Helpful)"
               >
@@ -240,7 +277,49 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
               *Nhân viên kiểm duyệt trước khi gửi
             </div>
           </div>
+
+          <div className="flex items-center gap-2 text-[10px] text-slate-500">
+            <span className="text-emerald-400">✓ Tone: {brandTone} phù hợp</span>
+            <span>•</span>
+            <span>{hasMatchedKb ? 'KB evidence đã được truy vấn' : 'Chưa có KB evidence xác thực'}</span>
+          </div>
         </div>
+
+        {showRecoveryPanel && (
+          <div className="replymind-recovery rounded-xl border border-rose-500/30 bg-rose-950/15 p-3 space-y-2.5">
+            <div className="flex items-center gap-2 text-xs font-semibold text-rose-200">
+              <AlertCircle className="w-3.5 h-3.5 text-rose-400" />
+              Recovery: chọn hướng xử lý tiếp theo
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={() => {
+                  setShowFeedbackModal(false);
+                  document.querySelector<HTMLTextAreaElement>('textarea[aria-label="AI reply draft"]')?.focus();
+                }}
+                className="rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-1.5 text-[11px] text-slate-300 hover:border-indigo-500"
+              >
+                Soạn / sửa thủ công
+              </button>
+              <button
+                onClick={handleRegenerate}
+                className="rounded-lg border border-indigo-500/40 bg-indigo-950/40 px-2.5 py-1.5 text-[11px] text-indigo-200 hover:bg-indigo-900/50"
+              >
+                Regenerate với context mới
+              </button>
+              <button
+                onClick={() => {
+                  setShowFeedbackModal(false);
+                  setFeedbackSuccess('Đã đánh dấu cần handoff cho supervisor.');
+                  setTimeout(() => setFeedbackSuccess(null), 3000);
+                }}
+                className="rounded-lg border border-amber-500/40 bg-amber-950/30 px-2.5 py-1.5 text-[11px] text-amber-200 hover:bg-amber-900/40"
+              >
+                Escalate
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Manual Custom Reply Input */}
         <form onSubmit={handleSendCustom} className="flex items-center gap-2">
